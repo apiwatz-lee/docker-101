@@ -6,8 +6,9 @@ const port = 8000;
 let conn = null;
 
 const initMySQL = async () => {
-  conn = mysql.createConnection({
+  conn = await mysql.createConnection({
     host: 'db',
+    port: 3306,
     user: 'root',
     password: 'root',
     database: 'tutorial',
@@ -19,9 +20,13 @@ app.get('/hello-world', (req, res) => {
 });
 
 app.get('/users', async (req, res) => {
-  const query = 'SELECT * FROM users';
-  const [results] = await conn.query(query);
-  res.json(results);
+  try {
+    const query = 'SELECT * FROM users';
+    const [results] = await conn.query(query);
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.listen(port, async () => {

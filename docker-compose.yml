@@ -5,6 +5,8 @@ services:
     build: . # ตำแหน่ง dockerfile
     ports:
       - '8000:8000' # map port ออกมา เหมือน -p ใน docker run
+    depends_on:
+      - db
   db:
     image: mysql:8.0
     container_name: db
